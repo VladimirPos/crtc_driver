@@ -58,7 +58,6 @@ static ssize_t dev_write(struct file *file, const char __user *ubuf, size_t coun
    &time.tm_hour, &time.tm_min, &time.tm_sec, &tv.tv_usec);
    intime = mktime(time.tm_year, time.tm_mon, time.tm_mday, time.tm_hour, time.tm_min, time.tm_sec);
    intime = ((intime*s_to_ns)+tv.tv_usec);
-   printk("%ld",intime);
    counter=0;
    c = strlen(buf);
    *ppos = c;
@@ -151,7 +150,6 @@ static int __init timer_init(void) {
    }
   printk(KERN_ALERT "custom rtc driver loaded!\n");
   intime = ktime_get_real_ns();
-  printk("%ld",intime);
   ktime = ktime_set( 0, timer_interval_ns );
   hrtimer_init( &hr_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL );
   hr_timer.function = &timer_callback;
@@ -165,9 +163,8 @@ static void __exit timer_exit(void) {
    class_unregister(crtcClass);
    class_destroy(crtcClass);
    unregister_chrdev(majorNumber, DEVICE_NAME);
-    ret = hrtimer_cancel( &hr_timer );
-    if (ret) printk("The timer was still in use...\n");    
-    printk("rtc module uninstalling");  
+    ret = hrtimer_cancel( &hr_timer );    
+    printk(KERN_ALERT "rtc module uninstalling");  
 }
 
 MODULE_LICENSE("GPL");
