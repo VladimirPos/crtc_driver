@@ -1,32 +1,36 @@
 #!/bin/sh
 echo 'inserting module'
-insmod crtc_driver.ko
+insmod crtc.ko 
 echo 'showing module info'
-modinfo crtc_driver.ko
-echo crtc: `cat /dev/crtc`
+modinfo crtc.ko
+echo crtc: `hwclock -f /dev/rtc1`
 echo rtc `hwclock`
-sleep 3s
-echo crtc: `cat /dev/crtc`
+echo 'sleep 10s'
+sleep 10s
+echo crtc: `hwclock -f /dev/rtc1`
 echo rtc `hwclock`
 echo 'fast mode'
 echo 1 > /proc/crtc
 cat /proc/crtc
-echo "set rtc's valus to crtc"
-timetoset=`hwclock`
-echo ${timetoset::26} > /dev/crtc
-echo crtc: `cat /dev/crtc`
+echo "set valus to crtc"
+`hwclock -f /dev/rtc1 --set --date "2000/01/01 00:00:00.0"`
+echo crtc: `hwclock -f /dev/rtc1`
 echo rtc `hwclock`
-echo 'sleep 5s'
-sleep 5s
-echo crtc: `cat /dev/crtc`
+echo 'sleep 10s'
+sleep 10s
+echo crtc: `hwclock -f /dev/rtc1`
 echo rtc `hwclock`
 echo 'slow mode'
 echo 0 > /proc/crtc
 cat /proc/crtc
-echo 'set time to crtc and sleep 20s'
-echo "1997-01-31 00:05:00.000901" > /dev/crtc
-echo crtc: `cat /dev/crtc`
-sleep 20s
-echo crtc: `cat /dev/crtc`
+echo "set valus to crtc"
+`hwclock -f /dev/rtc1 --set --date "2000/01/01 00:00:00.0"`
+sleep 1
+echo crtc: `hwclock -f /dev/rtc1`
+echo rtc `hwclock`
+echo 'sleep 10s'
+sleep 10s
+echo crtc: `hwclock -f /dev/rtc1`
+echo rtc `hwclock`
 echo 'unistall module'
-rmmod crtc_driver.ko
+rmmod crtc.ko
